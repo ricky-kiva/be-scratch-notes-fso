@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const cors = require('cors')
 
 morgan.token('post-body', (req, res) => {
     if (req.method === 'POST' && req.body) {
@@ -16,6 +17,7 @@ const unknownEndpoint = (request, response) =>
     })
 
 app.use(express.json()) // impl. json-parser on Express
+app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-body'))
 
 /* Overridden by Morgan
