@@ -1,7 +1,22 @@
 const express = require('express')
 const app = express()
 
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+}
+
+const unknownEndpoint = (request, response) =>
+    response.status(404).send({
+        status: 'error', 
+        message: 'Unknown Endpoint'
+    })
+
 app.use(express.json()) // impl. json-parser on Express
+app.use(requestLogger) // impl. custom middleware
 
 let notes = [
     {
@@ -71,6 +86,8 @@ const generateId = () => {
     const maxId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0
     return maxId + 1
 }
+
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
