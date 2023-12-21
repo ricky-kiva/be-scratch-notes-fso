@@ -1,13 +1,13 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
-const requestLogger = (request, response, next) => {
-    console.log('Method:', request.method)
-    console.log('Path:  ', request.path)
-    console.log('Body:  ', request.body)
-    console.log('---')
-    next()
-}
+morgan.token('post-body', (req, res) => {
+    if (req.method === 'POST' && req.body) {
+        return JSON.stringify(req.body)
+    }
+    return ' '
+})
 
 const unknownEndpoint = (request, response) =>
     response.status(404).send({
@@ -16,7 +16,18 @@ const unknownEndpoint = (request, response) =>
     })
 
 app.use(express.json()) // impl. json-parser on Express
-app.use(requestLogger) // impl. custom middleware
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-body'))
+
+/* Overridden by Morgan
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+} */
+
+// app.use(requestLogger) // impl. custom middleware
 
 let notes = [
     {
@@ -87,7 +98,7 @@ const generateId = () => {
     return maxId + 1
 }
 
-app.use(unknownEndpoint)
+app.use(unknownEndpoint) // impl. custom middleware
 
 const PORT = 3001
 app.listen(PORT, () => {
