@@ -18,6 +18,7 @@ const unknownEndpoint = (request, response) =>
 
 app.use(express.json()) // impl. json-parser on Express
 app.use(cors())
+app.use(express.static('dist')) // make Express show static content from `dist` dir.
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-body'))
 
 /* Overridden by Morgan
