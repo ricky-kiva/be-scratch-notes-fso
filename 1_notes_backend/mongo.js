@@ -18,14 +18,20 @@ const noteSchema = new mongoose.Schema({
     important: Boolean
 })
 
+// if the first param is `Note` (singular), then Mongoose will automatically set the collection name to `notes` (plural)
 const Note = mongoose.model('Note', noteSchema)
 
-const note = new Note({
-    content: 'HTML is Easy',
-    important: true
-})
+// const note = new Note({
+//     content: 'HTML is Easy',
+//     important: true
+// })
 
-note.save().then(result => {
-    console.log('note saved!')
+// note.save().then(result => {
+//     console.log('note saved!')
+//     mongoose.connection.close() // note: always close the connection after premise
+// })
+
+Note.find({}).then(result => {
+    result.forEach(note => console.log(note))
     mongoose.connection.close()
 })
