@@ -3,29 +3,9 @@ const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const password = process.argv[2]
-const dbName = 'notes_app'
+require('dotenv').config()
 
-const urlMongo = `mongodb+srv://rickyslash-fso:${password}@cluster-notes-fso.sfkae7u.mongodb.net/${dbName}?retryWrites=true&w=majority`
-
-mongoose.set('strictQuery', false)
-mongoose.connect(urlMongo)
-
-const noteSchema = new mongoose.Schema({
-    content: String,
-    important: Boolean
-})
-
-// modify the `toJSON` method of the schema (applied when retrieving data from MongoDB)
-noteSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
-
-const Note = mongoose.model('Note', noteSchema)
+const Note = require('./models/note')
 
 const app = express()
 
@@ -57,24 +37,6 @@ const requestLogger = (request, response, next) => {
 } */
 
 // app.use(requestLogger) // impl. custom middleware
-
-// let notes = [
-//     {
-//         id: 1,
-//         content: "HTML is easy",
-//         important: true
-//     },
-//     {
-//         id: 2,
-//         content: "Browser can execute only JavaScript",
-//         important: false
-//     },
-//     {
-//         id: 3,
-//         content: "GET and POST are the most important methods of HTTP protocol",
-//         important: true
-//     }
-// ]
 
 app.get('/api/notes', (request, response) => {
     Note.find({}).then(notes => {
@@ -127,7 +89,7 @@ const generateId = () => {
 
 app.use(unknownEndpoint) // impl. custom middleware
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
