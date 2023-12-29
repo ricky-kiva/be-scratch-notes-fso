@@ -90,7 +90,12 @@ app.put('/api/notes/:id', (request, response, next) => {
         important: body.important
     }
 
-    Note.findByIdAndUpdate(id, note, { new: true }) // `new: true` will return updated doc. 
+    // `new: true` will return updated doc.
+    // `runValidators: true` will apply validator stated on schema on PUT
+    // `context: query` need to also be set along with `runValidators: true` for some technical reasons
+    Note.findByIdAndUpdate(
+        id, note, { new: true, runValidators: true, context: 'query' }
+    ) 
         .then(updatedNote => response.json(updatedNote))
         .catch(error => next(error))
 })
