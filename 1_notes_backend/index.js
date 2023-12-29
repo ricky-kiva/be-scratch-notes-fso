@@ -16,12 +16,6 @@ morgan.token('post-body', (req, res) => {
     return ' '
 })
 
-const unknownEndpoint = (request, response) =>
-    response.status(404).send({
-        status: 'error', 
-        message: 'Unknown Endpoint'
-    })
-
 app.use(express.json()) // impl. json-parser on Express
 app.use(cors())
 app.use(express.static('dist')) // make Express show static content from `dist` dir.
@@ -44,7 +38,7 @@ app.get('/api/notes', (request, response) => {
     })
 })
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
     const id = request.params.id
 
     Note.findById(id)
@@ -54,8 +48,8 @@ app.get('/api/notes/:id', (request, response) => {
                 : response.status(404).end() // handle if no res. with such `id` is found
         )
         .catch(error => {
-            console.log(error)
-            response.status(400).send({ error: 'malformatted id' }) // handle if `id` is not in MongoDB `id` format
+            // handle if `id` is not in MongoDB `id` format
+            next(error) // `next(...)` will pass execution to `error handler middleware`
         })
 })
 
@@ -63,7 +57,10 @@ app.post('/api/notes', (request, response) => {
     const body = request.body
 
     if (body.content === undefined) {
-        return response.status(400).json({ error: 'content missing' })
+        return response.status(400).json({ 
+            status: 'error',
+            message: 'content missing' 
+        })
     }
 
     const note = new Note({
@@ -81,12 +78,27 @@ app.delete('/api/notes/:id', (request, response) => {
     response.status(204).end()
 })
 
-const generateId = () => {
-    const maxId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0
-    return maxId + 1
+const unknownEndpoint = (request, response) =>
+    response.status(404).send({
+        status: 'error', 
+        message: 'Unknown Endpoint'
+    })
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ 
+            status: 'error',
+            error: 'malformatted id' 
+        })
+    }
+
+    next(error)
 }
 
 app.use(unknownEndpoint) // impl. custom middleware
+app.use(errorHandler) // impl. err. handler
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
