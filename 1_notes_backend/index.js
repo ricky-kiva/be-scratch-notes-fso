@@ -71,11 +71,12 @@ app.post('/api/notes', (request, response) => {
     note.save().then(savedNote => { response.json(savedNote) })
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-    const id = Number(request.params.id)
-    notes = notes.filter(note => note.id !== id)
-
-    response.status(204).end()
+app.delete('/api/notes/:id', (request, response, next) => {
+    const id = request.params.id
+    
+    Note.findByIdAndDelete(id)
+        .then(result => response.status(204).end())
+        .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) =>
