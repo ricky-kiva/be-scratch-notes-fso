@@ -47,7 +47,16 @@ app.get('/api/notes', (request, response) => {
 app.get('/api/notes/:id', (request, response) => {
     const id = request.params.id
 
-    Note.findById(id).then(note => { response.json(note) })
+    Note.findById(id)
+        .then(note => 
+            note 
+                ? response.json(note) 
+                : response.status(404).end() // handle if no res. with such `id` is found
+        )
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' }) // handle if `id` is not in MongoDB `id` format
+        })
 })
 
 app.post('/api/notes', (request, response) => {
