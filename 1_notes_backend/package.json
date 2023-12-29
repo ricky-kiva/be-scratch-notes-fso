@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "debug:dev": "nodemon --inspect index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "rm -rf dist && cd ../1_notes_frontend && npm run build && cp -r dist ../1_notes_backend",
+    "build:ui": "rm -rf dist && cd ../../../fs-server-communication-fso/fs-scratch-server-communication-fso/1_notes_app && npm run build && cp -r dist ../../../fs-server-program-fso/fs-scratch-server-program-fso/1_notes_backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m build(fe): build FE & move `dist` dir. to BE && git push"
   },
   "author": "Rickyslash",
