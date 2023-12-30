@@ -41,9 +41,9 @@ app.get('/api/notes/:id', (request, response, next) => {
   const id = request.params.id
 
   Note.findById(id)
-    .then(note => 
-      note 
-        ? response.json(note) 
+    .then(note =>
+      note
+        ? response.json(note)
         : response.status(404).end() // handle if no res. with such `id` is found
     )
     .catch(error => {
@@ -56,9 +56,9 @@ app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   if (body.content === undefined) {
-    return response.status(400).json({ 
+    return response.status(400).json({
       status: 'error',
-      message: 'content missing' 
+      message: 'content missing'
     })
   }
 
@@ -74,7 +74,7 @@ app.post('/api/notes', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   const id = request.params.id
-    
+
   Note.findByIdAndDelete(id)
     .then(_result => response.status(204).end())
     .catch(error => next(error))
@@ -94,14 +94,14 @@ app.put('/api/notes/:id', (request, response, next) => {
   // `context: query` need to also be set along with `runValidators: true` for some technical reasons
   Note.findByIdAndUpdate(
     id, note, { new: true, runValidators: true, context: 'query' }
-  ) 
+  )
     .then(updatedNote => response.json(updatedNote))
     .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) =>
   response.status(404).send({
-    status: 'error', 
+    status: 'error',
     message: 'Unknown Endpoint'
   })
 
@@ -109,9 +109,9 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({ 
+    return response.status(400).send({
       status: 'error',
-      error: 'malformatted id' 
+      error: 'malformatted id'
     })
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({
