@@ -1,6 +1,6 @@
-# Programming a Server
+# Programming & Testing Servers, User Administration
 
-## Full Stack Developer's Oath
+### Full Stack Developer's Oath
 
 As my lecturer said; Full stack development is extremely hard, that is why I will use all the possible means to make it easier
 
