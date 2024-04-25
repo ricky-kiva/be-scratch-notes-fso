@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "cross-env": "^7.0.3"
-  },
-  "devDependencies": {
-    "supertest": "^7.0.0"
-  }
-}
