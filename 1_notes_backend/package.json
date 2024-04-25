@@ -4,11 +4,11 @@
   "description": "Backend for notes app with node.js",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "debug:dev": "nodemon --inspect index.js",
     "lint": "eslint .",
-    "test": "node --test",
+    "test": "cross-env NODE_ENV=test node --test",
     "build:ui": "rm -rf dist && cd ../../../fs-server-communication-fso/fs-scratch-server-communication-fso/1_notes_app && npm run build && cp -r dist ../../../fs-server-program-fso/fs-scratch-server-program-fso/1_notes_backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m \"build(fe): build FE & move `dist` dir. to BE\" && git push"
   },
