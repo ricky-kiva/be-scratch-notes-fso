@@ -11,14 +11,21 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Note.deleteMany({})
-  let noteObject = new Note(helper.initialNotes[0])
-  await noteObject.save()
-  noteObject = new Note(helper.initialNotes[1])
-  await noteObject.save()
+  console.log('Note cleared')
+
+  for (let [i, note] of helper.initialNotes.entries()) {
+    let noteObject = new Note(note)
+    await noteObject.save()
+    console.log(`saved ${i}`)
+  }
+
+  console.log('done')
 })
 
 // run with `npm run test -- --test-only`
 test.only('notes returns json', async () => {
+  console.log('entered test')
+
   await api
     .get('/api/notes')
     .expect(200)
