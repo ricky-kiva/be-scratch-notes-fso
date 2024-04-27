@@ -21,7 +21,7 @@ notesRouter.get('/:id', (request, response, next) =>
     })
 )
 
-notesRouter.post('/', (request, response, next) => {
+notesRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -29,12 +29,13 @@ notesRouter.post('/', (request, response, next) => {
     important: body.important || false
   })
 
-  note.save()
-    .then(savedNote => response
-      .status(201)
-      .json(savedNote)
-    )
-    .catch(error => next(error))
+  // instead of using `.then`, this approach evades 'UnhandledPromiseRejectionWarning' on test
+  try {
+    const savedNote = await note.save()
+    response.status(201).json(savedNote)
+  } catch(e) {
+    next(e)
+  }
 })
 
 notesRouter.delete('/:id', (request, response, next) =>
