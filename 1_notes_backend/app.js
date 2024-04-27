@@ -4,12 +4,14 @@ const cors = require('cors')
 
 const logger = require('./utils/logger')
 const config = require('./utils/config')
-const middleware = require('./utils/middleware')
-const notesRouter = require('./controllers/notes')
 
 // to evade `UnhandledPromiseRejectionWarning` from `node:test`
 // - (if don't wanna use, encapsultes `await`  with `try-catch` for each rotes)
-require('express-async-errors') // need to be called before express routes
+require('express-async-errors') // need to be called before express's routes/controllers
+
+const middleware = require('./utils/middleware')
+const notesRouter = require('./controllers/notes')
+
 const app = express()
 
 mongoose.set('strictQuery') // allow querying without strictly follow Schema
