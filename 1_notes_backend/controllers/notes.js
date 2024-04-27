@@ -8,18 +8,18 @@ notesRouter.get('/', async (request, response) => {
   response.json(notes)
 })
 
-notesRouter.get('/:id', (request, response, next) =>
-  Note.findById(request.params.id)
-    .then(note =>
-      note
-        ? response.json(note)
-        : response.status(404).end() // handle if no res. with such `id` is found
-    )
-    .catch(error => {
-      // handle if `id` is not in MongoDB `id` format
-      next(error) // `next(...)` will pass execution to `error handler middleware`
-    })
-)
+notesRouter.get('/:id', async (request, response, next) => {
+  try {
+    const note = await Note.findById(request.params.id)
+    if (note) {
+      response.json(note)
+    } else {
+      response.status(404).end()
+    }
+  } catch(e) {
+    next(e)
+  }
+})
 
 notesRouter.post('/', async (request, response, next) => {
   const body = request.body
@@ -38,11 +38,14 @@ notesRouter.post('/', async (request, response, next) => {
   }
 })
 
-notesRouter.delete('/:id', (request, response, next) =>
-  Note.findByIdAndDelete(request.params.id)
-    .then(() => response.status(204).end())
-    .catch(error => next(error))
-)
+notesRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Note.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch(e) {
+    next(e)
+  }
+})
 
 notesRouter.put('/:id', (request, response, next) => {
   const body = request.body
