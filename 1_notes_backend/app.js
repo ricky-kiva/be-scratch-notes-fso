@@ -14,7 +14,7 @@ const notesRouter = require('./controllers/notes')
 
 const app = express()
 
-mongoose.set('strictQuery') // allow querying without strictly follow Schema
+mongoose.set('strictQuery', false) // allow querying without strictly follow Schema
 
 logger.info('connecting to', config.MONGODB_URI)
 mongoose.connect(config.MONGODB_URI)
