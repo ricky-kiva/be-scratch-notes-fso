@@ -117,7 +117,7 @@ describe('when there is initially some Notes saved', () => {
       const contents = notesAfter.map(r => r.content)
       assert(!contents.includes(noteToDelete.content))
 
-      assert.strictEqual(notesAfter.length, helper.initialNotes.length - 1)
+      assert.strictEqual(notesAfter.length, notesAtStart.length - 1)
     })
   })
 })
