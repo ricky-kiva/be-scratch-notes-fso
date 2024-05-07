@@ -6,7 +6,12 @@ const noteSchema = new mongoose.Schema({
     minLength: 5,
     required: true
   },
-  important: Boolean
+  important: Boolean,
+  // taking ref. of `User` to be a part of `noteSchema`'s property
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 // modify the `toJSON` method of the schema (applied when retrieving data from MongoDB)
