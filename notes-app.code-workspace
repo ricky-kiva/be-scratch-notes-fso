@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../../fs-server-communication-fso/fs-scratch-server-communication-fso"
+			"path": "../fs-server-communication-fso/fe-scratch-notes-fso"
 		}
 	]
 }
