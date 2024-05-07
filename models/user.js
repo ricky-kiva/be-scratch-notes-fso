@@ -1,7 +1,13 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+    // check if DB is free from duplicates if set `unique` to true. Unless, it won't work
+    // `autoindex` must be true when connecting to MongodB
+    unique: true,
+  },
   name: String,
   passwordHash: String,
   // taking ref. of `Notes` to be a part of `userSchema`'s array property
