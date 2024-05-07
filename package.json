@@ -1,7 +1,7 @@
 {
   "name": "notes_backend",
   "version": "0.0.1",
-  "description": "Backend for notes app with node.js",
+  "description": "Backend for notes app with Node.js",
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
@@ -9,7 +9,7 @@
     "debug:dev": "nodemon --inspect index.js",
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=test node --test",
-    "build:ui": "rm -rf dist && cd ../../../fs-server-communication-fso/fs-scratch-server-communication-fso/1_notes_app && npm run build && cp -r dist ../../../fs-server-program-fso/fs-scratch-server-program-fso/1_notes_backend",
+    "build:ui": "rm -rf dist && cd ../../fs-server-communication-fso/fe-scratch-notes-fso && npm run build && cp -r dist ../../fs-server-program-fso/be-scratch-notes-fso",
     "deploy:full": "npm run build:ui && git add . && git commit -m \"build(fe): build FE & move `dist` dir. to BE\" && git push"
   },
   "author": "Rickyslash",
